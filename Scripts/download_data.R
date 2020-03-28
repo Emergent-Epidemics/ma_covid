@@ -23,6 +23,7 @@ dates_format <- tolower(format(dates, format = "%B"))
 dates_format <- glue("{dates_format}-{day(dates)}")
 missed <- c()
 for(i in dates_format){
+  Sys.sleep(5)
   if(i %in% c("march-9",  "march-10", "march-11", "march-12")){
     file.i <- paste0("https://www.mass.gov/doc/covid-19-cases-in-massachusetts-", i, "-2020/download")
   }else{
