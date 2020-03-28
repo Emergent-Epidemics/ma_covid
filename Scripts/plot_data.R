@@ -10,6 +10,7 @@ library(dplyr)
 library(tidyr)
 library(wesanderson)
 library(scales)
+library(lme4)
 
 #########
 #Globals#
