@@ -29,7 +29,7 @@ find_county <- function(x, county){
 ######
 #Data#
 ######
-county_census <- read.csv("../Data/whichCounty.csv", header = FALSE, stringsAsFactors = FALSE)
+county_census <- read.csv("../Data/Meta_data/whichCounty.csv", header = FALSE, stringsAsFactors = FALSE)
 
 ###################
 #Loop through PDFs#
