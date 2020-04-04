@@ -15,6 +15,7 @@ library(glue)
 start <- as.POSIXct(strptime("2020-03-09", format = "%Y-%m-%d"))
 end <- as.POSIXct(strptime(substr(Sys.time(), 1, 10), format = "%Y-%m-%d")) 
 dates <- seq(start, end, by = 60*60*24)
+save_new <- FALSE
 
 ###############
 #Acc funcitons#
@@ -54,7 +55,12 @@ for(i in 1:length(files)){
   for(c in 1:ncol(data)){
     
     county.c.i <- unlist(lapply(county.i, FUN = find_county, county = colnames(data)[c]))
-    find.c.i <- which(county.c.i == 1)
+    
+    if(as.character(date.i) == "2020-03-30"){
+      find.c.i <- which(county.c.i == 2)
+    }else{
+      find.c.i <- which(county.c.i == 1)
+    }
     
     if(length(find.c.i) == 0){
       next
@@ -84,4 +90,6 @@ for(i in 1:length(files)){
 data$Dukes_And_Nantucket <- data$Dukes #as of Mar 27th, state is reporting combined counts for these two counties
 data$Dukes <- rep(NA, nrow(data))
 
-write.csv(data, file = "../Data/Case Counts/MA_DPH_COVID19.csv", quote = FALSE)
+if(save_new == TRUE){
+  write.csv(data, file = "../Data/Case Counts/MA_DPH_COVID19.csv", quote = FALSE)
+}
