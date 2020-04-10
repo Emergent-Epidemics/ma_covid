@@ -38,6 +38,7 @@ dates <- as.POSIXct(strptime(data[,1], format = "%Y-%m-%d"))
 diff_mat <- data
 for(i in 2:ncol(diff_mat)){
   diff_mat[-1,i] <- diff(diff_mat[,i])
+  diff_mat[-1,i][which(diff_mat[-1,i] < 0)] <-0
 }
 
 diff.df <- diff_mat %>% gather(location, cases, Middlesex:Dukes_And_Nantucket) 
@@ -46,12 +47,12 @@ diff.df$Date <- as.POSIXct(strptime(diff.df$Date, format = "%Y-%m-%d"))
 
 doubling_prov <- list()
 doubling_fixed <- list()
-for(i in 5:(length(dates))){
-  use.i <- which(diff.df$Date >= dates[i-4] & diff.df$Date <= dates[i])
+for(i in 4:(length(dates))){
+  use.i <- which(diff.df$Date >= dates[i-3] & diff.df$Date <= dates[i])
   
   data.i <- diff.df[use.i, ]
   
-  data.i$DATE <- as.numeric(data.i$Date - dates[i-4], unit = "days")
+  data.i$DATE <- as.numeric(data.i$Date - dates[i-3], unit = "days")
   mod3.i <- try(lmer(data = data.i, log(New + 1) ~ DATE + (DATE|County)), silent = TRUE)
   
   if(is(mod3.i)[1] == "try-error"){
@@ -65,14 +66,14 @@ for(i in 5:(length(dates))){
     names.i <- rownames(ranef(mod3.i)$County)
   }
   
-  doubling_prov[[i-4]] <- doubling.i
-  names(doubling_prov[[i-4]]) <- names.i
-  doubling_fixed[[i-4]] <- fixed.i
+  doubling_prov[[i-3]] <- doubling.i
+  names(doubling_prov[[i-3]]) <- names.i
+  doubling_fixed[[i-3]] <- fixed.i
 }
 
 rates <- unlist(lapply(doubling_prov, function(x) x))
 prov <- unlist(lapply(doubling_prov, function(x) names(x)))
-times <- rep(dates[5:(length(dates))], times = unlist(lapply(doubling_prov, function(x) length(x))))
+times <- rep(dates[4:(length(dates))], times = unlist(lapply(doubling_prov, function(x) length(x))))
 dat.plot <- data.frame(rates, times, prov)
 
 quartz(width = 8, height = 6)
