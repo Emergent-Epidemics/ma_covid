@@ -50,13 +50,13 @@ summary(best.mod.hosp)
 
 quartz()
 layout(matrix(1:4, nrow = 2))
-  plot(per_first_time_pos[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "Prop. pos. (first time tested, 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "First time tested vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#b2182b")
+  plot(per_first_time_pos[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (first time tested, 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "First time tested vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#b2182b")
   
-  plot(per_repeat_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "Prop. pos. (repeat tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Repeat tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#2166ac")
+  plot(per_repeat_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (repeat tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Repeat tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#2166ac")
   
-  plot(per_all_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "Prop. pos. (all tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "All tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#f4a582")
+  plot(per_all_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (all tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "All tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#f4a582")
   
-  plot(per_all_pos_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "Prop. pos. (only higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Only higher-ed testing vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#4d4d4d")
+  plot(per_all_pos_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (only higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Only higher-ed testing vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#4d4d4d")
 
 summary(lm(hosps[use_hosp][-c(1:17)] ~ per_first_time_pos[use_hosp][-c(78:94)] ))
 
