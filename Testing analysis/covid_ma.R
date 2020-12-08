@@ -25,7 +25,7 @@ pos$Date <- as.POSIXct(strptime(pos$Date , format = "%m/%d/%y"))
 hosp$Date <- as.POSIXct(strptime(hosp$Date , format = "%m/%d/%y"))
 hosp$roll_new_7 <- c(rep(NA, 6), rollmean(hosp$Net.new.number.of.confirmed.COVID.patients.in.hospital.today, 7))
 mt_hosp_date <- match(pos$Date, hosp$Date)
-hosps <- hosp$roll_new_7[mt_hosp_date]
+hosps <- hosp$Total.number.of.confirmed.COVID.patients.in.hospital.today[mt_hosp_date]
   
 per_first_time_pos <- pos$Molecular.Positive.New/pos$First.Molecular.Test.per.person
 per_repeat_pos_no_uni <- (pos$All.Positive.Molecular.Tests_MA.without.Higher.ED - pos$Molecular.Positive.New)/(pos$All.Molecular.Tests_MA.without.Higher.ED - pos$First.Molecular.Test.per.person)
@@ -50,15 +50,15 @@ summary(best.mod.hosp)
 
 quartz()
 layout(matrix(1:4, nrow = 2))
-  plot(per_first_time_pos[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (first time tested, 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "First time tested vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#b2182b")
+  plot(per_first_time_pos[use_hosp][-c(90:94)], hosps[use_hosp][-c(1:5)], xlab = "5 day lagged Prop. pos. (first time tested, 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "First time tested vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#b2182b")
   
-  plot(per_repeat_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (repeat tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Repeat tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#2166ac")
+  plot(per_repeat_pos_no_uni[use_hosp][-c(90:94)], hosps[use_hosp][-c(1:5)], xlab = "5 day lagged Prop. pos. (repeat tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Repeat tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#2166ac")
   
-  plot(per_all_pos_no_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (all tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "All tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#f4a582")
+  plot(per_all_pos_no_uni[use_hosp][-c(90:94)], hosps[use_hosp][-c(1:5)], xlab = "5 day lagged Prop. pos. (all tested, no higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "All tested, no higher-ed vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#f4a582")
   
-  plot(per_all_pos_uni[use_hosp][-c(78:94)], hosps[use_hosp][-c(1:17)], xlab = "17 day lagged Prop. pos. (only higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Only higher-ed testing vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#4d4d4d")
+  plot(per_all_pos_uni[use_hosp][-c(90:94)], hosps[use_hosp][-c(1:5)], xlab = "5 day lagged Prop. pos. (only higher-ed 7 day avg)", ylab = "State-wide admissions (7 day avg)", bty = "n", main = "Only higher-ed testing vs. hospital admissions (COVID-19 in MA)", pch = 16, col = "#4d4d4d")
 
-summary(lm(hosps[use_hosp][-c(1:17)] ~ per_first_time_pos[use_hosp][-c(78:94)] ))
+summary(lm(hosps[use_hosp][-c(1:14)] ~ per_first_time_pos[use_hosp][-c(81:94)] ))
 
 #######
 #Plots#
