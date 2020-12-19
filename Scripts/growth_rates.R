@@ -34,7 +34,6 @@ cols <- sample(wes_palette(name = "Zissou1", n = length(unique(plot.df$County)),
 ##############
 #Growth rates#
 ##############
-dates <- as.POSIXct(strptime(data[,1], format = "%Y-%m-%d")) 
 diff_mat <- data
 for(i in 2:ncol(diff_mat)){
   diff_mat[-1,i] <- diff(diff_mat[,i])
@@ -44,6 +43,8 @@ for(i in 2:ncol(diff_mat)){
 diff.df <- diff_mat %>% gather(location, cases, Middlesex:Dukes_And_Nantucket) 
 colnames(diff.df) <- c("Date", "County", "New")
 diff.df$Date <- as.POSIXct(strptime(diff.df$Date, format = "%Y-%m-%d"))
+dates <- unique(diff.df$Date)
+dates <- dates[order(dates)]
 
 doubling_prov <- list()
 doubling_fixed <- list()
