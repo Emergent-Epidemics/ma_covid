@@ -16,24 +16,32 @@ do_plots <- FALSE
 ######
 #Data#
 ######
-test <- read.csv("covid-19-dashboard_12-14-2020/Testing2.csv")
-pos <- read.csv("covid-19-dashboard_12-14-2020/TestingByDate.csv")
-hosp <- read.csv("covid-19-dashboard_12-14-2020/Hospitalization from Hospitals.csv")
+get_latest_file <- list.files("covid-19-dashboard_12-14-2020/latest data", full.names = TRUE)
 
-test$Date <- as.POSIXct(strptime(test$Date , format = "%m/%d/%y"))
-pos$Date <- as.POSIXct(strptime(pos$Date , format = "%m/%d/%y"))
-hosp$Date <- as.POSIXct(strptime(hosp$Date , format = "%m/%d/%y"))
-hosp$roll_new_7 <- c(rep(NA, 6), rollmean(hosp$Net.new.number.of.confirmed.COVID.patients.in.hospital.today, 7))
+if(length(get_latest_file) != 1){
+  stop()
+}else{
+  test <- read_excel(get_latest_file, sheet = "Testing2 (Report Date)")
+  pos <- read_excel(get_latest_file, sheet = "TestingByDate (Test Date)")
+  hosp <- read_excel(get_latest_file, sheet = "Hospitalization from Hospitals")
+}
+
+test$Date <- as.POSIXct(strptime(test$Date , format = "%Y-%m-%d"))
+pos$Date <- as.POSIXct(strptime(pos$Date , format = "%Y-%m-%d"))
+hosp$Date <- as.POSIXct(strptime(hosp$Date , format = "%Y-%m-%d"))
+hosp$roll_new_7 <- c(rep(NA, 6), rollmean(hosp$`Net new number of COVID patients in hospital today`, 7))
 mt_hosp_date <- match(pos$Date, hosp$Date)
-hosps <- hosp$Total.number.of.confirmed.COVID.patients.in.hospital.today[mt_hosp_date]
-  
-repeat_tests_non_higher_ed <- pos$All.Molecular.Tests-pos$First.Molecular.Test.per.person-pos$All.Molecular.Tests_Higher.Ed.ONLY
+hosps <- hosp$`Total number of COVID patients in hospital today`[mt_hosp_date]
 
-per_first_time_pos <- pos$Molecular.Positive.New/pos$First.Molecular.Test.per.person
-per_first_time_pos_mod <- (pos$Molecular.Positive.New-(0.01*repeat_tests_non_higher_ed))/pos$First.Molecular.Test.per.person
-per_repeat_pos_no_uni <- (pos$All.Positive.Molecular.Tests_MA.without.Higher.ED - pos$Molecular.Positive.New)/(pos$All.Molecular.Tests_MA.without.Higher.ED - pos$First.Molecular.Test.per.person)
-per_all_pos_no_uni <- pos$All.Positive.Molecular.Tests_MA.without.Higher.ED/pos$All.Molecular.Tests_MA.without.Higher.ED
-per_all_pos_uni <- pos$All.Positive.Molecular.Tests_Higher.Ed.ONLY/pos$All.Molecular.Tests_Higher.Ed.ONLY
+repeat_tests_non_higher_ed <- pos$`All Molecular Tests`-pos$`First Molecular Test per person`-pos$`All Molecular Tests_Higher Ed ONLY`
+
+per_first_time_pos <- pos$`Molecular Positive New`/pos$`First Molecular Test per person`
+per_first_time_pos_review <- pos$`Molecular Positive New`/pos$`Molecular New`
+per_first_time_pos_mod <- (pos$`Molecular Positive New`-(0.01*repeat_tests_non_higher_ed))/pos$`First Molecular Test per person`
+first_time_pos_mod <- (pos$`Molecular Positive New`-(0.01*repeat_tests_non_higher_ed))
+per_repeat_pos_no_uni <- (pos$`All Positive Molecular Tests_MA without Higher ED` - pos$`Molecular Positive New`)/(pos$`All Molecular Tests_MA without Higher ED` - pos$`First Molecular Test per person`)
+per_all_pos_no_uni <- pos$`All Positive Molecular Tests_MA without Higher ED`/pos$`All Molecular Tests_MA without Higher ED`
+per_all_pos_uni <- pos$`All Positive Molecular Tests_Higher Ed ONLY`/pos$`All Molecular Tests_Higher Ed ONLY`
 
 ##########
 #Hosp pre#
